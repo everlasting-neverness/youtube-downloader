@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.content {
+    margin: 0 auto;
+    width: 400px;
+}
+
+h1, h4, p {
+    text-align: center;
+}
+
+.form {
+    margin-top: 20px;
+}
