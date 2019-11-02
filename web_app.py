@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, send_file
 from downloader import downloader
+import os
 
 app = Flask(__name__)
 
@@ -14,7 +15,7 @@ def download():
         return redirect('/')
     else:
         output_file_name = downloader({ 'url': url_to_download})
-        return send_file('/Files/' + output_file_name, attachment_filename=output_file_name)
+        return send_file(os.path.join('Files', output_file_name), attachment_filename=output_file_name)
 
 @app.route('/error_503', methods=['GET'])
 def error_503():
