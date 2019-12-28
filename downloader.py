@@ -1,30 +1,27 @@
-from __future__ import unicode_literals
 import youtube_dl
 import os
 # from sys import argv
 
-def getListDiff(list1, list2):
-    return (list(set(list1) - set(list2)))
+global file_name
+file_name = ''
 
-def getFileNamesInDirectory():
-    files = [f for f in os.listdir(os.getcwd()) if os.path.isfile(os.path.join(os.getcwd(), f))]
-    print (files)
-    return files
-
-def getFileName(listBefore, listAfter):
-    listDiff = getListDiff(listBefore, listAfter)
-    if len(listDiff) == 0:
-        # need to update logic
-        return listAfter[0]
-    elif len(listDiff) > 1:
-        return listDiff[-1]
-    else:
-        return ''
+def getConvertedFileName(file_name):
+    if file_name != '':
+        fa = file_name.split('.webm')
+        if len(fa) == 1:
+            return file_name
+        elif len(fa) > 1:
+            return fa[0] + '.mp3'
 
 def downloader(params):
     
     if params['url'] == '':
         return False
+
+    def get_title_hook(d):
+        if d['status'] == 'finished':
+            global file_name
+            file_name = getConvertedFileName(d['filename'])
 
     ydl_opts = {
         'format': 'bestaudio/best',
@@ -35,34 +32,22 @@ def downloader(params):
             'preferredcodec': 'mp3',
             'preferredquality': '320',
         }],
+        'progress_hooks': [get_title_hook],
     }
 
-    print (os.getcwd())
-    print ('---current dir')
-
-    print(os.getcwd().endswith('Files'))
-    print ('---is for current dir')
-
-    # need to fix change of path
     if os.path.exists('Files'):
         print('path exists and we change dir there')
         os.chdir('Files')
     elif os.getcwd().endswith('Files'):
         print('path exists and we are there')
-    elif not os.getcwd().endswith('Files'):
-        print ('make new dir because getcwd !endswith(Files)')
-        os.makedirs('Files', exist_ok=True)
-        os.chdir('Files')
-    elif not os.path.exists('Files'):
-        print ('make new dir because no path "Files"')
+    elif not os.getcwd().endswith('Files') or not os.path.exists('Files'):
+        print ('make new dir')
         os.makedirs('Files', exist_ok=True)
         os.chdir('Files')
     else:
         return False
 
     print ('Starting to convert file...')
-
-    files_before_work = getFileNamesInDirectory()
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         # with open('../' + argv[1], 'r') as file:
@@ -71,8 +56,6 @@ def downloader(params):
 
     print ('Convertation is done')
 
-    files_after_work = getFileNamesInDirectory()
-
-    file_name = getFileName(files_before_work, files_after_work)
+    global file_name
 
     return file_name
