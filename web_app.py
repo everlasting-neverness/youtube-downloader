@@ -4,6 +4,7 @@ import os
 
 app = Flask(__name__)
 
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
@@ -11,14 +12,16 @@ def index():
 
 @app.route('/download', methods=['GET'])
 def upload_link():
-    url_to_download = username = request.args.get('url_to_download')
+    url_to_download = request.args.get('url_to_download')
     if url_to_download == '':
         return redirect('/')
     else:
-        output_file_name = downloader({ 'url': url_to_download})
-        # return output_file_name
-        response = make_response(send_file(os.path.join('Files', output_file_name), attachment_filename=output_file_name, as_attachment=True))
+        output_file_name = downloader({'url': url_to_download})
+        response = make_response(send_file(os.path.join(
+            'Files', output_file_name), attachment_filename=output_file_name, as_attachment=True))
         response.headers['Access-Control-Expose-Headers'] = 'Content-Disposition'
+        print(output_file_name)
+        response.headers['Content-Disposition'] = 'attachment; filename="{}"'.format(output_file_name)
         response.headers['X-file-name'] = output_file_name
         return response
 
@@ -29,4 +32,4 @@ def error_503():
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)

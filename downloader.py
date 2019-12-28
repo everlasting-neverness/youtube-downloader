@@ -40,11 +40,16 @@ def downloader(params):
     print (os.getcwd())
     print ('---current dir')
 
+    print(os.getcwd().endswith('Files'))
+    print ('---is for current dir')
+
     # need to fix change of path
-    if not os.getcwd() == 'Files' or not os.path.exists('Files'):
+    if not os.getcwd().endswith('Files') or not os.path.exists('Files'):
+        print ('make new dir')
         os.makedirs('Files', exist_ok=True)
         os.chdir('Files')
     else:
+        print ('dont make new dir')
         os.chdir('Files')
 
     print ('Starting to convert file...')
