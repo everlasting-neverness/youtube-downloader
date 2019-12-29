@@ -3,11 +3,9 @@ window.onload = function() {
     const urlInput = document.getElementById('url_to_download');
 
     function download_file(name, contents) {
-        var mime_type = "audio/mpeg";
+        const blob = new Blob([contents], {type: contents.mime_type});
 
-        var blob = new Blob([contents], {type: mime_type});
-
-        var dlink = document.createElement('a');
+        const dlink = document.createElement('a');
         dlink.download = name;
         dlink.href = window.URL.createObjectURL(blob);
         dlink.onclick = function(e) {
@@ -34,9 +32,14 @@ window.onload = function() {
         if (!urlToDownload) {
             return false;
         }
+        let filename = '';
         fetch(`/download?url_to_download=${urlToDownload}`)
             .then(res => {
-                download_file(getFileName(res), res);
+                filename = getFileName(res);
+                return res.blob()
+            })
+            .then(data => {
+                download_file(filename, data);
             })
             .catch(err => {
                 console.log(err);

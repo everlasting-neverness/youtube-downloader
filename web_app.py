@@ -4,7 +4,6 @@ import os
 
 app = Flask(__name__)
 
-
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
@@ -20,8 +19,6 @@ def upload_link():
         response = make_response(send_file(os.path.join(
             'Files', output_file_name), attachment_filename=output_file_name, as_attachment=True))
         response.headers['Access-Control-Expose-Headers'] = 'Content-Disposition'
-        print(output_file_name)
-        response.headers['Content-Disposition'] = 'attachment; filename="{}"'.format(output_file_name)
         response.headers['X-file-name'] = output_file_name
         return response
 
