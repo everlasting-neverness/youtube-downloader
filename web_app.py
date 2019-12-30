@@ -2,11 +2,11 @@ from flask import Flask, render_template, request, redirect, send_file, make_res
 from downloader import downloader
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static/public', static_folder='static', template_folder='static/public')
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('index_prod.html')
 
 
 @app.route('/download', methods=['GET'])
@@ -29,4 +29,4 @@ def error_503():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=4005)

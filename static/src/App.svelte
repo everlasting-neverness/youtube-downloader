@@ -1,8 +1,7 @@
-window.onload = function() {
-    const downloadForm = document.querySelector('.form');
-    const urlInput = document.getElementById('url_to_download');
+<script>
+	let urlToDownload = '';
 
-    function download_file(name, contents) {
+	const download_file = (name, contents) => {
         const blob = new Blob([contents], {type: contents.mime_type});
 
         const dlink = document.createElement('a');
@@ -20,15 +19,15 @@ window.onload = function() {
         dlink.remove();
     }
 
-    function getFileName(response) {
+	const getFileName = response => {
         let output = 'new file'
         if (response && response.headers) output = response.headers.get("X-file-name");
         return output
     };
 
-    downloadForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const urlToDownload = urlInput.value;
+	const submitHandler = e => {
+		e.preventDefault();
+
         if (!urlToDownload) {
             return false;
         }
@@ -44,5 +43,19 @@ window.onload = function() {
             .catch(err => {
                 console.log(err);
             });
-    });
-};
+	};
+</script>
+
+<main class="content">
+	<h1>YouTube Downloader</h1>
+	<p>You can put a youtube in the from bellow and download a file</p>
+	<form class="form" action="/download" method="GET" on:submit={submitHandler}>
+		<input type="text" name="url_to_download" id="url_to_download" bind:value={urlToDownload}>
+		<button>Download</button>
+	</form>
+</main>
+
+
+<style>
+	
+</style>
