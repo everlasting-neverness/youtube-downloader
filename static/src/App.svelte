@@ -1,5 +1,8 @@
 <script>
-	let urlToDownload = '';
+    export let initialUrl;
+    import { getFileName, getFileNameFromHeaders } from './utils/siteUtils.js';
+
+    let urlToDownload = '';
 
 	const download_file = (name, contents) => {
         const blob = new Blob([contents], {type: contents.mime_type});
@@ -19,12 +22,6 @@
         dlink.remove();
     }
 
-	const getFileName = response => {
-        let output = 'new file'
-        if (response && response.headers) output = response.headers.get("X-file-name");
-        return output
-    };
-
 	const submitHandler = e => {
 		e.preventDefault();
 
@@ -32,7 +29,7 @@
             return false;
         }
         let filename = '';
-        fetch(`/download?url_to_download=${urlToDownload}`)
+        fetch(`${initialUrl}/download?url_to_download=${urlToDownload}`)
             .then(res => {
                 filename = getFileName(res);
                 return res.blob()
