@@ -4,23 +4,26 @@ import uuid
 # from sys import argv
 
 global file_name
+global new_dir_uid
 file_name = ''
+new_dir_uid = ''
 
 def create_dir_with_uuid():
     new_dir_uid = str(uuid.uuid4())
     os.mkdir(os.path.join(os.getcwd(), new_dir_uid))
     return new_dir_uid
 
-def getConvertedFileName(file_name):
-    if file_name != '':
-        fa = file_name.split('.webm')
-        if len(fa) == 1:
-            return file_name
-        elif len(fa) > 1:
-            return fa[0] + '.mp3'
+def getConvertedFileName(file_name='new_rec'):
+    fa = file_name.split('.webm')
+    if len(fa) == 1:
+        return file_name
+    elif len(fa) > 1:
+        return fa[0] + '.mp3'
 
 def downloader(params):
-    
+    global file_name
+    global new_dir_uid
+
     if params['url'] == '':
         return False
 
@@ -28,18 +31,6 @@ def downloader(params):
         if d['status'] == 'finished':
             global file_name
             file_name = getConvertedFileName(d['filename'])
-
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'outtmpl': '%(title)s.%(ext)s',
-        'nocheckcertificate': True,
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '320',
-        }],
-        'progress_hooks': [get_title_hook],
-    }
 
     if os.path.exists('Files'):
         print('path exists and we change dir there')
@@ -57,10 +48,18 @@ def downloader(params):
 
     new_dir_uid = create_dir_with_uuid()
 
-    # print('Navigating to the new file dir...')
-
-    # os.chdir(new_dir_uid)
-
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl': '{}/%(title)s.%(ext)s'.format(new_dir_uid),
+        'nocheckcertificate': True,
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '320',
+        }],
+        'progress_hooks': [get_title_hook],
+    }
+    
     print ('Starting to convert file...')
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -69,10 +68,6 @@ def downloader(params):
                 ydl.download([params['url']])
 
     print ('Convertation is done')
-
-    # os.chdir('..')
-
-    global file_name
 
     output_data = { "file_name": file_name, "dir_uid": new_dir_uid }
 

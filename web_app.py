@@ -8,6 +8,15 @@ import os
 app = Flask(__name__, static_url_path='/static/public', static_folder='static', template_folder='static/public')
 cors = CORS(app)
 
+def getPureFileName(dir_uid, file_name):
+    if not dir_uid in file_name:
+        return file_name
+    fa = file_name.split('{}/'.format(dir_uid))
+    if len(fa) == 1:
+        return file_name
+    elif len(fa) > 1:
+        return fa[1]
+
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
@@ -26,12 +35,10 @@ def upload_link():
         return redirect('/')
     else:
         try:
-            # output_file_name = downloader({'url': url_to_download})
             output_data = downloader({'url': url_to_download})
-            dir_uid, file_name = output_data['dir_uid'], output_data['file_name']
+            file_name =getPureFileName(output_data['dir_uid'], output_data['file_name'])
             response = make_response(send_file(os.path.join(
-                # 'Files', dir_uid, file_name), attachment_filename=file_name, as_attachment=True))
-                'Files', file_name), attachment_filename=file_name, as_attachment=True))
+                'Files', output_data['file_name']), attachment_filename=file_name, as_attachment=True))
             response.headers['Access-Control-Expose-Headers'] = 'Content-Disposition'
             response.headers['X-file-name'] = file_name
             return response
