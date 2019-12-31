@@ -26,11 +26,14 @@ def upload_link():
         return redirect('/')
     else:
         try:
-            output_file_name = downloader({'url': url_to_download})
+            # output_file_name = downloader({'url': url_to_download})
+            output_data = downloader({'url': url_to_download})
+            dir_uid, file_name = output_data['dir_uid'], output_data['file_name']
             response = make_response(send_file(os.path.join(
-                'Files', output_file_name), attachment_filename=output_file_name, as_attachment=True))
+                # 'Files', dir_uid, file_name), attachment_filename=file_name, as_attachment=True))
+                'Files', file_name), attachment_filename=file_name, as_attachment=True))
             response.headers['Access-Control-Expose-Headers'] = 'Content-Disposition'
-            response.headers['X-file-name'] = output_file_name
+            response.headers['X-file-name'] = file_name
             return response
         except:
             raise InvalidUsage('There was an error processing the request.', status_code=500)

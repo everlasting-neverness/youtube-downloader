@@ -1,9 +1,15 @@
 import youtube_dl
 import os
+import uuid
 # from sys import argv
 
 global file_name
 file_name = ''
+
+def create_dir_with_uuid():
+    new_dir_uid = str(uuid.uuid4())
+    os.mkdir(os.path.join(os.getcwd(), new_dir_uid))
+    return new_dir_uid
 
 def getConvertedFileName(file_name):
     if file_name != '':
@@ -47,6 +53,14 @@ def downloader(params):
     else:
         return False
 
+    print('Creating file dir...')
+
+    new_dir_uid = create_dir_with_uuid()
+
+    # print('Navigating to the new file dir...')
+
+    # os.chdir(new_dir_uid)
+
     print ('Starting to convert file...')
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -56,6 +70,10 @@ def downloader(params):
 
     print ('Convertation is done')
 
+    # os.chdir('..')
+
     global file_name
 
-    return file_name
+    output_data = { "file_name": file_name, "dir_uid": new_dir_uid }
+
+    return output_data
