@@ -33,7 +33,7 @@ def upload_link():
             response.headers['X-file-name'] = output_file_name
             return response
         except:
-            raise InvalidUsage('There was an error processing the request', status_code=500)
+            raise InvalidUsage('There was an error processing the request.', status_code=500)
 
 
 @app.route('/error_503', methods=['GET'])

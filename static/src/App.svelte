@@ -1,10 +1,11 @@
 <script>
     export let initialUrl;
-    import { getFileName, getFileNameFromHeaders } from './utils/siteUtils.js';
+    import { handleErrors, getFileName, getFileNameFromHeaders } from './utils/siteUtils.js';
 
-    let urlToDownload = '';
+    let urlToDownload = '',
+        errorMessage = '';
 
-	const download_file = (name, contents) => {
+	const downloadFile = (name, contents) => {
         const blob = new Blob([contents], {type: contents.mime_type});
 
         const dlink = document.createElement('a');
@@ -20,25 +21,29 @@
 
         dlink.click();
         dlink.remove();
-    }
+    };
 
 	const submitHandler = e => {
 		e.preventDefault();
+
+        errorMessage = '';
 
         if (!urlToDownload) {
             return false;
         }
         let filename = '';
         fetch(`${initialUrl}/download?url_to_download=${urlToDownload}`)
+            .then(handleErrors)
             .then(res => {
                 filename = getFileName(res);
                 return res.blob()
             })
             .then(data => {
-                download_file(filename, data);
+                downloadFile(filename, data);
             })
             .catch(err => {
                 console.log(err);
+                errorMessage = err.message || 'There was an error in the app. Please try again later.';
             });
 	};
 </script>
@@ -50,6 +55,9 @@
 		<input type="text" name="url_to_download" id="url_to_download" bind:value={urlToDownload}>
 		<button>Download</button>
 	</form>
+    {#if errorMessage}
+        <p>{errorMessage}</p>
+    {/if}
 </main>
 
 

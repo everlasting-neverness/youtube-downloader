@@ -3,6 +3,16 @@ export const getInitialUrlForRequests = () => {
     return `${protocol}//${hostname}:${port === "5000" ? "4005" : port}`;
 }
 
+export const handleErrors = async (response) => {
+    if (!response.ok) {
+        const message = await response.json().then(res => res.message);
+        throw Error(message);
+    }
+    return response;
+}
+
+/* Handle File name */
+
 export const getFileNameFromHeaders = (headers) => {
     const xFileName = headers.get("X-file-name");
     if (xFileName) return xFileName;
