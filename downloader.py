@@ -66,3 +66,4 @@ class Downloader:
         output_data = { "file_name": self.file_name, "dir_uid": self.new_dir_uid }
 
         return output_data
+        
