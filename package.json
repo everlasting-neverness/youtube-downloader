@@ -1,8 +1,8 @@
 {
-  "name": "svelte-app",
+  "name": "youtube-media-downloader",
   "version": "1.0.0",
   "scripts": {
-    "build": "rollup -c --prefix static",
+    "build": "cd static && rollup -c",
     "dev": "rollup -c -w --prefix static",
     "start": "sirv public --prefix static"
   },
