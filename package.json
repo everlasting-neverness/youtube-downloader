@@ -2,9 +2,7 @@
   "name": "youtube-media-downloader",
   "version": "1.0.0",
   "scripts": {
-    "build": "cd static && rollup -c",
-    "dev": "rollup -c -w --prefix static",
-    "start": "sirv public --prefix static"
+    "build": "rollup -c"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.0",
@@ -20,5 +18,8 @@
   },
   "engines": {
     "node": "10.x"
+  },
+  "config": {
+    "prefix": "static"
   }
 }
