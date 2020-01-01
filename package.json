@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "preinstall": "cd static && npm install",
+    "postinstall": "npm uninstall",
     "build": "cd static && rollup -c"
   },
   "devDependencies": {
