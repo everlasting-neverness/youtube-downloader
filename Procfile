@@ -1,1 +1,1 @@
-web: ./heroku_setup.sh
+web: bash ./heroku_setup.sh
