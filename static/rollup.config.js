@@ -23,7 +23,6 @@ export default {
 			css: css => {
 				css.write('public/build/bundle.css');
 			},
-			include: 'src/**/*.svelte',
 		}),
 
 		// If you have external dependencies installed from
