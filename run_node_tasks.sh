@@ -1,2 +1,3 @@
-npm install --prefix static
+cd static
+npm install
 npm run build
