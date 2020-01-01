@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, send_file, make_response, jsonify
 from flask import Flask
 from flask_cors import CORS, cross_origin
-from downloader import downloader
+from downloader import Downloader
 from server_src.error_utils import InvalidUsage
 import os
 
@@ -35,8 +35,9 @@ def upload_link():
         return redirect('/')
     else:
         try:
-            output_data = downloader({'url': url_to_download})
-            file_name =getPureFileName(output_data['dir_uid'], output_data['file_name'])
+            dwnloader = Downloader()
+            output_data = dwnloader.download({'url': url_to_download})
+            file_name = getPureFileName(output_data['dir_uid'], output_data['file_name'])
             response = make_response(send_file(os.path.join(
                 'Files', output_data['file_name']), attachment_filename=file_name, as_attachment=True))
             response.headers['Access-Control-Expose-Headers'] = 'Content-Disposition'
