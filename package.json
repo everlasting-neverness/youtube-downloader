@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "scripts": {
     "preinstall": "cd static && npm install",
-    "postinstall": "npm uninstall",
     "build": "cd static && rollup -c"
   },
   "devDependencies": {
@@ -13,12 +12,13 @@
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-alias": "^2.2.0",
     "svelte": "^3.0.0"
   },
   "dependencies": {
     "sirv-cli": "^0.4.4"
   },
   "engines": {
-    "node": "10.14.1"
+    "node": "10.x"
   }
 }
