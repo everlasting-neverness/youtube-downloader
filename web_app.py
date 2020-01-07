@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, send_file, make_response, jsonify
-from flask import Flask
 from flask_cors import CORS, cross_origin
 from downloader import Downloader
 from server_src.error_utils import InvalidUsage
